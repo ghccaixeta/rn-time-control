@@ -2,6 +2,9 @@
   "expo": {
     "name": "expo-boilerplate-rn",
     "slug": "expo-boilerplate-rn",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
