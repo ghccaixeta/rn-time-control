@@ -1,10 +1,14 @@
 import React, { PropsWithChildren } from "react";
 import { ContainerComponent } from "./styles";
 
-const Container: React.FC<PropsWithChildren> = ({ children }) => {
+interface IContainerProps {
+    backgroundColor?: string;
+}
+
+const Container: React.FC<PropsWithChildren<IContainerProps>> = ({ backgroundColor, children }) => {
 
     return (
-        <ContainerComponent>
+        <ContainerComponent backgroundColor={backgroundColor}>
             {children}
         </ContainerComponent>
     )

@@ -10,7 +10,7 @@ import SettingsIcon from '@assets/icons/settings.svg'
 import HomeScreen from '@screens/Home';
 import SettingsScreen from '@screens/Settings';
 import { Modalize } from 'react-native-modalize';
-import { Text } from 'react-native';
+import TimesForm from 'src/organisms/TimesForm';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -67,7 +67,9 @@ export function AppRoutes() {
           }} />
       </Navigator>
 
-      <Modalize adjustToContentHeight ref={modalizeRef}><Text>Modal</Text></Modalize>
+      <Modalize adjustToContentHeight ref={modalizeRef}>
+        <TimesForm />
+      </Modalize>
     </>
   );
 }
