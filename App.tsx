@@ -1,5 +1,6 @@
 
 import { Inter_400Regular, Inter_700Bold } from '@expo-google-fonts/inter';
+import { Routes } from '@routes/index';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
@@ -11,15 +12,7 @@ export default function App() {
   const [fontsLoaded] = useFonts({Inter_400Regular, Inter_700Bold});
   return (
     <ThemeProvider theme={theme}>
-      <View style={styles.container}>
-        {
-          fontsLoaded &&
-          <>
-            <Text>Open up App.js to start working on your app!</Text>
-            <StatusBar style="auto" />
-          </>
-        }
-      </View>
+      <Routes />
     </ThemeProvider>
   );
 }
