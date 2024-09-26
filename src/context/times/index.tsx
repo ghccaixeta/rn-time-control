@@ -7,7 +7,7 @@ export interface ITimes {
     completeName: string;
     minutes: number;
     isActive: boolean;
-    date: string;
+    date?: string;
 }
 
 const TimesContext = createContext<ITimesContext>({} as ITimesContext);
