@@ -3,6 +3,7 @@ import { Inter_400Regular, Inter_700Bold } from '@expo-google-fonts/inter';
 import { Routes } from '@routes/index';
 import { useFonts } from 'expo-font';
 import React from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Loader from 'src/atoms/Loader';
 import { TimesProvider } from 'src/context/times';
@@ -15,12 +16,15 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <SafeAreaProvider>
         <TimesProvider>
-          {
-            fontsLoaded ?
-              <Routes />
-              :
-              <Loader />
-          }
+          <GestureHandlerRootView>
+            {
+              fontsLoaded ?
+                <Routes />
+                :
+                <Loader />
+            }
+
+          </GestureHandlerRootView>
         </TimesProvider>
       </SafeAreaProvider>
     </ThemeProvider>
