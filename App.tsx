@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Loader from 'src/atoms/Loader';
+import { TimesProvider } from 'src/context/times';
 import theme from 'src/theme';
 import { ThemeProvider } from 'styled-components/native';
 
@@ -13,12 +14,14 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <SafeAreaProvider>
-        {
-          fontsLoaded ?
-            <Routes />
-            :
-            <Loader />
-        }
+        <TimesProvider>
+          {
+            fontsLoaded ?
+              <Routes />
+              :
+              <Loader />
+          }
+        </TimesProvider>
       </SafeAreaProvider>
     </ThemeProvider>
   );
