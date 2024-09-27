@@ -9,11 +9,14 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@date-fns/tz": "^1.1.2",
     "@expo-google-fonts/inter": "^0.2.3",
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
     "@types/react": "~18.2.79",
+    "crypto-js": "^4.2.0",
+    "date-fns": "^4.1.0",
     "expo": "~51.0.28",
     "expo-font": "~12.0.10",
     "expo-status-bar": "~1.12.1",

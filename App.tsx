@@ -5,7 +5,7 @@ import { useFonts } from 'expo-font';
 import React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Loader from 'src/atoms/Loader';
+import Loader from 'src/components/atoms/Loader';
 import { TimesProvider } from 'src/context/times';
 import theme from 'src/theme';
 import { ThemeProvider } from 'styled-components/native';

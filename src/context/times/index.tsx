@@ -4,6 +4,7 @@ import { MMKVLoader, useMMKVStorage } from 'react-native-mmkv-storage';
 const Storage = new MMKVLoader().withEncryption().initialize();
 
 export interface ITimes {
+    id: string;
     completeName: string;
     minutes: number;
     isActive: boolean;

@@ -16,6 +16,7 @@ export const TextComponent = styled(Text) <ITextComponentProps>`
     text-align: ${(props: any) => props.center ? 'center' : 'start'};
     font-size: 16px;
     font-weight: ${(props: any) => props.bold ? 'bold' : 'normal'};
+    font-family: 'Inter';
     
 
 `

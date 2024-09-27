@@ -1,15 +1,16 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { TextInput } from "react-native-gesture-handler";
-import Container from "src/atoms/Container";
-import InputContainer from "src/atoms/InputContainer";
+import Container from "src/components/atoms/Container";
+import InputContainer from "src/components/atoms/InputContainer";
 import { useTheme } from "styled-components/native";
 import UserIcon from '@assets/icons/user.svg'
 import HourGlassTimeIcon from '@assets/icons/hourglass-time.svg'
+import CryptoJS from 'crypto-js';
 
 import * as Yup from 'yup';
-import Button from "src/atoms/Button";
-import Spacer from "src/atoms/Spacer";
+import Button from "src/components/atoms/Button";
+import Spacer from "src/components/atoms/Spacer";
 import { useTimes } from "src/context/times";
 
 interface FormValues {
@@ -36,8 +37,10 @@ const TimesForm: React.FC = () => {
     const handleSubmit = (
         values: FormValues,
     ) => {
+
+        const hashSHA256 = CryptoJS.SHA256(new Date().getTime().toString()).toString();
         setIsLoading(true)
-        setTimes([...times, { completeName: values.completeName, minutes: values.time, isActive: false }])
+        setTimes([...times, { id: hashSHA256, completeName: values.completeName, minutes: values.time, isActive: false }])
         setIsLoading(false)
     }
 
@@ -74,7 +77,7 @@ const TimesForm: React.FC = () => {
 
                         <Spacer size={40} />
 
-                        <Button title="Cadastrar" isLoading={isLoading} onPress={() => handleSubmit()} />
+                        <Button title="Cadastrar" isLoading={isLoading} onPress={() => handleSubmit()} disabled={isLoading} />
                     </>
                 )}
             </Formik>

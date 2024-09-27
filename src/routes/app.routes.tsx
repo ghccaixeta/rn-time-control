@@ -10,7 +10,7 @@ import SettingsIcon from '@assets/icons/settings.svg'
 import HomeScreen from '@screens/Home';
 import SettingsScreen from '@screens/Settings';
 import { Modalize } from 'react-native-modalize';
-import TimesForm from 'src/organisms/TimesForm';
+import TimesForm from 'src/components/organisms/TimesForm';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
