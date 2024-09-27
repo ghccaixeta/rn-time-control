@@ -5,7 +5,7 @@ import styled from "styled-components/native";
 interface IContainerProps {
     flexDirection: 'row' | 'column',
     justiFyContent: 'flex-start' | 'flex-end' | 'center' | 'space-between'
-    alignItems: 'start' | 'center'
+    alignItems?: 'start' | 'center' | 'end'
     width: number
 }
 

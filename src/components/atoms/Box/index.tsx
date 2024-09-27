@@ -5,7 +5,7 @@ import { Container } from "./styles";
 interface IBoxProps {
     flexDirection: 'row' | 'column',
     justiFyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between'
-    alignItems?: 'start' | 'center'
+    alignItems?: 'start' | 'center' | 'end'
     width?: number
 }
 

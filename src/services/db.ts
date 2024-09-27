@@ -21,10 +21,10 @@ export const createTable = async (db: SQLiteDatabase) => {
     await db.executeSql(query);
 };
 
-export const getTodoItems = async (db: SQLiteDatabase): Promise<ITimes[]> => {
+export const getTimes = async (db: SQLiteDatabase): Promise<ITimes[]> => {
     try {
         const todoItems: ITimes[] = [];
-        const results = await db.executeSql(`SELECT rowid as id,complete_name FROM ${tableName}`);
+        const results = await db.executeSql(`SELECT rowid as id,complete_name as completeName, minutes, status, date FROM ${tableName}`);
         results.forEach(result => {
             for (let index = 0; index < result.rows.length; index++) {
                 todoItems.push(result.rows.item(index))

@@ -6,11 +6,11 @@ import { useTheme } from 'styled-components';
 
 import HomeIcon from '@assets/icons/home.svg'
 import PlusIcon from '@assets/icons/plus.svg'
-import SettingsIcon from '@assets/icons/settings.svg'
+import ChartBarIcon from '@assets/icons/chart-bar.svg'
 import HomeScreen from '@screens/Home';
-import SettingsScreen from '@screens/Settings';
 import { Modalize } from 'react-native-modalize';
 import TimesForm from 'src/components/organisms/TimesForm';
+import ReportScreen from '@screens/Report';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -55,11 +55,11 @@ export function AppRoutes() {
 
           }} />
         <Screen
-          name="Configurações"
-          component={SettingsScreen}
+          name="Relatórios"
+          component={ReportScreen}
           options={{
             tabBarIcon: ({ color }) => (
-              <SettingsIcon stroke={color} width={25} height={25} />
+              <ChartBarIcon stroke={color} width={25} height={25} />
 
             ),
             headerStyle: { backgroundColor: theme.COLORS.PRIMARY },
