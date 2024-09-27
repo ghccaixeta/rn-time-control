@@ -24,7 +24,7 @@ const FormSchema = Yup.object().shape({
         .min(3, 'O nome deve deve conter 3 dígitos.'),
     time: Yup.number()
         .required('O tempo é obrigatório.')
-        .min(10, 'O tempo mímino deve ser 10min.')
+        .min(__DEV__ ? 1 : 10, 'O tempo mímino deve ser 10min.')
 });
 
 const TimesForm: React.FC = () => {

@@ -10,6 +10,7 @@ import Box from "src/components/atoms/Box";
 import Spacer from "src/components/atoms/Spacer";
 import { Pressable } from "react-native";
 import { differenceInSeconds, format } from "date-fns";
+import { getDBConnection, saveTimes } from "src/services/db";
 
 interface ITimesCardProps {
     time: ITimes
@@ -20,12 +21,9 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
     const { times, setTimes } = useTimes()
     const [seconds, setSeconds] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
-    const [fineshed, setFineshed] = useState(false);
+    const [fineshed, setFineshed] = useState<boolean>();
 
     const handleStart = () => {
-
-
-
 
         const _times: ITimes[] = times
 
@@ -40,14 +38,28 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
         setTimes(_times);
         setIsRunning(true);
 
+    }
 
+    const getTime = () => {
+        const minutesAmount = Math.floor(seconds / 60)
+        const secondsAmount = seconds % 60
+
+        const _minutes = String(minutesAmount).padStart(2, '0')
+        const _seconds = String(secondsAmount).padStart(2, '0')
+
+        return (`${_minutes}:${_seconds}`)
 
     }
 
+    const handleComplete = async () => {
 
-    useEffect(() => {
-        setIsRunning(time.status === 'active')
-    }, [])
+        const db = await getDBConnection();
+
+        await saveTimes(db, time)
+
+        const _times = times.filter(item => item.id !== time.id)
+        setTimes(_times)
+    }
 
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,7 +73,17 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
                 )
 
                 if (secondsDiff >= time.minutes * 60) {
+
+                    const _times: ITimes[] = times
+
+                    _times.map((item) => {
+                        if (item.id === time.id) {
+                            item.status = 'completed'
+                        }
+                    })
+                    setTimes(_times);
                     setFineshed(true)
+                    setIsRunning(false)
                     clearInterval(interval)
                 } else {
                     setSeconds(secondsDiff)
@@ -74,11 +96,9 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
         }
     }, [isRunning])
 
-    const minutesAmount = Math.floor(seconds / 60)
-    const secondsAmount = seconds % 60
-
-    const _minutes = String(minutesAmount).padStart(2, '0')
-    const _seconds = String(secondsAmount).padStart(2, '0')
+    useEffect(() => {
+        setIsRunning(time.status === 'active')
+    }, [])
 
     return (
         <Container>
@@ -95,13 +115,16 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
             </Box>
             <Box flexDirection="row" alignItems="center" width={50}>
                 {
-                    isRunning && !fineshed ?
-                        <CustomText>{_minutes}:{_seconds}</CustomText>
-                        : fineshed ?
-                            <CheckIcon stroke={theme.COLORS.GREEN_700} />
-                            :
+
+                    isRunning
+                        ? <CustomText color={theme.COLORS.GREEN_500} bold size={theme.FONT_SIZE.LG}>{getTime()}</CustomText>
+                        : time.status === 'waiting' ?
                             <Pressable onPress={handleStart}>
                                 <PlayerPlayIcon fill={theme.COLORS.WHITE} />
+                            </Pressable>
+                            :
+                            <Pressable onPress={handleComplete}>
+                                <CheckIcon stroke={theme.COLORS.GREEN_500} />
                             </Pressable>
                 }
             </Box>

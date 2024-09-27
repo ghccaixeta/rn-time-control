@@ -29,27 +29,35 @@ const HomeScreen: React.FC = () => {
 
     return (
         <Container>
-            {
+            <FlatList
+                data={times}
+                ListHeaderComponent={
+                    <>
+                        <TimesHeader />
+                        <Spacer vertical={30} />
+                    </>
+                }
+                ListEmptyComponent={
+                    <Box flexDirection="column" alignItems="center" justiFyContent="center">
+                        <NotFoundIcon width={200} height={300} />
+                        <Spacer vertical={20} />
+                        <CustomText size={theme.FONT_SIZE.LG}>Nenhum disponível no momento.</CustomText>
+                    </Box>
+                }
+                renderItem={({ item }) => <TimesCard time={item} />}
+                keyExtractor={item => item.id}
+                ItemSeparatorComponent={() => <Spacer vertical={10} />
+                }
+            />
+            {/* {
                 times.length > 0 ?
-                    <FlatList
-                        data={times}
-                        ListHeaderComponent={
-                            <>
-                                <TimesHeader times={times} />
-                                <Spacer vertical={30} />
-                            </>
-                        }
-                        renderItem={({ item }) => <TimesCard time={item} />}
-                        keyExtractor={item => item.id}
-                        ItemSeparatorComponent={() => <Spacer vertical={10} />}
-                    />
 
                     :
                     <Box flexDirection="column" alignItems="center" justiFyContent="center">
                         <NotFoundIcon color={theme.COLORS.SECONDARY} width={400} height={400} />
                         <CustomText color={theme.COLORS.SECONDARY}>Nenhum disponível no momento.</CustomText>
                     </Box>
-            }
+            } */}
         </Container>
     )
 }

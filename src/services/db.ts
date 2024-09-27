@@ -1,12 +1,5 @@
 import { enablePromise, openDatabase, SQLiteDatabase } from 'react-native-sqlite-storage';
-
-interface ITimes {
-    value: string;
-    // completeName: string;
-    // minutes: number;
-    // isActive: boolean;
-    // date?: string;
-}
+import { ITimes } from 'src/context/times';
 
 const tableName = 'times';
 
@@ -19,7 +12,10 @@ export const getDBConnection = async () => {
 export const createTable = async (db: SQLiteDatabase) => {
     // create table if not exists
     const query = `CREATE TABLE IF NOT EXISTS ${tableName}(
-        value TEXT NOT NULL
+        complete_name TEXT NOT NULL,
+        minutes INTEGER NOT NULL,
+        status TEXT NOT NULL,
+        date TEXT NOT NULL
     );`;
 
     await db.executeSql(query);
@@ -28,7 +24,7 @@ export const createTable = async (db: SQLiteDatabase) => {
 export const getTodoItems = async (db: SQLiteDatabase): Promise<ITimes[]> => {
     try {
         const todoItems: ITimes[] = [];
-        const results = await db.executeSql(`SELECT rowid as id,value FROM ${tableName}`);
+        const results = await db.executeSql(`SELECT rowid as id,complete_name FROM ${tableName}`);
         results.forEach(result => {
             for (let index = 0; index < result.rows.length; index++) {
                 todoItems.push(result.rows.item(index))
@@ -41,9 +37,9 @@ export const getTodoItems = async (db: SQLiteDatabase): Promise<ITimes[]> => {
     }
 };
 
-export const saveTodoItems = async (db: SQLiteDatabase, todoItems: ITimes) => {
+export const saveTimes = async (db: SQLiteDatabase, todoItems: ITimes) => {
     const insertQuery =
-        `INSERT OR REPLACE INTO ${tableName}(value) values ('${todoItems.value}')`
+        `INSERT OR REPLACE INTO ${tableName}(complete_name,minutes,status,date) values ('${todoItems.completeName}',${todoItems.minutes},'${todoItems.status}','${todoItems.date}')`
 
     return db.executeSql(insertQuery);
 };

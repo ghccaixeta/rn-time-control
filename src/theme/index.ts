@@ -7,7 +7,7 @@ export default {
     BACKGROUND: '#44475A',
 
     GREEN_700: '#00875F',
-    GREEN_500: '#00B37E',
+    GREEN_500: '#50FA7B',
 
     RED: '#F75A68',
     RED_DARK: '#AA2834',

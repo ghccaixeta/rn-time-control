@@ -7,18 +7,16 @@ import { useTheme } from "styled-components/native";
 import RocketIcon from '@assets/icons/rocket.svg'
 import UsersIcon from '@assets/icons/users.svg'
 import CheckIcon from '@assets/icons/check.svg'
-import { ITimes } from "src/context/times";
+import { useTimes } from "src/context/times";
 
-interface ITimesHeader {
-    times: ITimes[]
-}
-
-const TimesHeader: React.FC<ITimesHeader> = ({ times }) => {
+const TimesHeader: React.FC = () => {
     const theme = useTheme()
+    const { times } = useTimes()
+
     return (
         <Box flexDirection="row" justiFyContent="space-between">
             <Card title="Ativos" leftComponent={<RocketIcon stroke={theme.COLORS.PRIMARY} />}>
-                <CustomText color={theme.COLORS.PRIMARY} center bold size={theme.FONT_SIZE.XL}>{times.length}</CustomText>
+                <CustomText color={theme.COLORS.PRIMARY} center bold size={theme.FONT_SIZE.XL}>{times.filter((item) => item.status === 'active').length}</CustomText>
             </Card>
             <Card title="Fila" leftComponent={<UsersIcon stroke={theme.COLORS.PRIMARY} />}>
                 <CustomText color={theme.COLORS.PRIMARY} center bold size={theme.FONT_SIZE.XL}>{times.filter((item) => item.status === 'waiting').length}</CustomText>
