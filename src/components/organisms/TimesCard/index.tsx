@@ -9,7 +9,7 @@ import { useTheme } from "styled-components/native";
 import Box from "src/components/atoms/Box";
 import Spacer from "src/components/atoms/Spacer";
 import { Pressable } from "react-native";
-import { addHours, differenceInSeconds, format } from "date-fns";
+import { differenceInSeconds, format } from "date-fns";
 
 interface ITimesCardProps {
     time: ITimes
@@ -33,7 +33,7 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
             if (item.id === time.id) {
                 const date = new Date();
                 item.date = date.toString()
-                item.isActive = true
+                item.status = 'active'
             }
         })
 
@@ -46,7 +46,7 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
 
 
     useEffect(() => {
-        setIsRunning(time.isActive)
+        setIsRunning(time.status === 'active')
     }, [])
 
     useEffect(() => {
@@ -82,9 +82,9 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
 
     return (
         <Container>
-            <Box flexDirection="column">
+            <Box flexDirection="column" width={50}>
                 <CustomText color={theme.COLORS.SECONDARY} bold>{time.completeName}</CustomText>
-                <Spacer size={10} />
+                <Spacer vertical={10} />
                 <CustomText>
                     {
                         time.date
@@ -93,7 +93,7 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
                     }
                 </CustomText>
             </Box>
-            <Box flexDirection="row" alignItems="center">
+            <Box flexDirection="row" alignItems="center" width={50}>
                 {
                     isRunning && !fineshed ?
                         <CustomText>{_minutes}:{_seconds}</CustomText>

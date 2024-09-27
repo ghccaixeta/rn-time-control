@@ -7,7 +7,7 @@ export interface ITimes {
     id: string;
     completeName: string;
     minutes: number;
-    isActive: boolean;
+    status: 'waiting' | 'active' | 'completed'
     date?: string;
 }
 

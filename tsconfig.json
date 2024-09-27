@@ -3,16 +3,11 @@
     "strict": true,
     "baseUrl": "./",
     "paths": {
-      "@assets/*":[
-        "./src/assets/*"
-      ],
-      "@screens/*":[
-        "./src/screens/*"
-      ],
-      "@routes/*":[
-        "./src/routes/*"
-      ]
+      "@assets/*": ["./src/assets/*"],
+      "@screens/*": ["./src/screens/*"],
+      "@routes/*": ["./src/routes/*"],
+      "@components/*": ["./src/components/*"]
     }
   },
-  "extends": "expo/tsconfig.base",
+  "extends": "expo/tsconfig.base"
 }

@@ -34,13 +34,12 @@ const TimesForm: React.FC = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
-    const handleSubmit = (
+    const handleSubmit = async (
         values: FormValues,
     ) => {
-
         const hashSHA256 = CryptoJS.SHA256(new Date().getTime().toString()).toString();
         setIsLoading(true)
-        setTimes([...times, { id: hashSHA256, completeName: values.completeName, minutes: values.time, isActive: false }])
+        setTimes([...times, { id: hashSHA256, completeName: values.completeName, minutes: values.time, status: 'waiting' }])
         setIsLoading(false)
     }
 
@@ -62,7 +61,7 @@ const TimesForm: React.FC = () => {
                             />
                         </InputContainer>
 
-                        <Spacer size={20} />
+                        <Spacer vertical={20} />
 
                         <InputContainer leftComponent={<HourGlassTimeIcon stroke={theme.COLORS.PRIMARY} />} errorMessage={touched.time ? errors.time : undefined}>
                             <TextInput
@@ -75,7 +74,7 @@ const TimesForm: React.FC = () => {
                             />
                         </InputContainer>
 
-                        <Spacer size={40} />
+                        <Spacer vertical={40} />
 
                         <Button title="Cadastrar" isLoading={isLoading} onPress={() => handleSubmit()} disabled={isLoading} />
                     </>
