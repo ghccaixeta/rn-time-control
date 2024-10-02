@@ -92,7 +92,7 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
                     new Date(time.date!)
                 )
 
-                if (secondsDiff - secondsPaused >= time.minutes * 60) {
+                if (secondsDiff - secondsPaused > time.minutes * 60) {
 
                     const _times: ITimes[] = times
 
@@ -147,7 +147,7 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
                                 <PauseIcon fill={theme.COLORS.WHITE} />
                             </Pressable>
                             : <Pressable onPress={handleComplete}>
-                                <CheckIcon stroke={theme.COLORS.GREEN_500} />
+                                <CheckIcon stroke={theme.COLORS.WHITE} />
                             </Pressable>
                 }
             </Box>

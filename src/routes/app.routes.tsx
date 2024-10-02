@@ -68,7 +68,7 @@ export function AppRoutes() {
       </Navigator>
 
       <Modalize adjustToContentHeight ref={modalizeRef}>
-        <TimesForm />
+        <TimesForm modalRef={modalizeRef} />
       </Modalize>
     </>
   );

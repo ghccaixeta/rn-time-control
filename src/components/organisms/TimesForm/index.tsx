@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { TextInput } from "react-native-gesture-handler";
 import Container from "src/components/atoms/Container";
 import InputContainer from "src/components/atoms/InputContainer";
@@ -12,7 +12,11 @@ import * as Yup from 'yup';
 import Button from "src/components/atoms/Button";
 import Spacer from "src/components/atoms/Spacer";
 import { useTimes } from "src/context/times";
+import { Modalize } from "react-native-modalize";
 
+interface ITimesFormInterface {
+    modalRef: React.RefObject<Modalize>
+}
 interface FormValues {
     completeName: string,
     time: number,
@@ -27,10 +31,11 @@ const FormSchema = Yup.object().shape({
         .min(__DEV__ ? 1 : 10, 'O tempo mímino deve ser 10min.')
 });
 
-const TimesForm: React.FC = () => {
+const TimesForm: React.FC<ITimesFormInterface> = ({ modalRef }) => {
 
     const theme = useTheme();
     const { times, setTimes } = useTimes();
+
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -41,6 +46,7 @@ const TimesForm: React.FC = () => {
         setIsLoading(true)
         setTimes([...times, { id: hashSHA256, completeName: values.completeName, minutes: values.time, status: 'waiting' }])
         setIsLoading(false)
+        modalRef.current?.close()
     }
 
     return (
