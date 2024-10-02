@@ -1,16 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { Container } from "./styles";
 
-import { ITimes, useTimes } from "src/context/times";
+import { ITimes, TIME_STATUS, useTimes } from "src/context/times";
 import CustomText from "src/components/atoms/Text";
 import PlayerPlayIcon from '@assets/icons/player-lay.svg'
+import PauseIcon from '@assets/icons/pause.svg'
 import CheckIcon from '@assets/icons/check.svg'
 import { useTheme } from "styled-components/native";
 import Box from "src/components/atoms/Box";
 import Spacer from "src/components/atoms/Spacer";
-import { Pressable } from "react-native";
+import { Pressable, Vibration } from "react-native";
 import { differenceInSeconds, format } from "date-fns";
 import { getDBConnection, saveTimes } from "src/services/db";
+import Tag from "@components/atoms/Tag";
+import RNBeep from 'react-native-a-beep';
 
 interface ITimesCardProps {
     time: ITimes
@@ -20,7 +24,8 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
     const theme = useTheme()
     const { times, setTimes } = useTimes()
     const [seconds, setSeconds] = useState(0);
-    const [isRunning, setIsRunning] = useState(false);
+    const [secondsPaused, setSecondsPaused] = useState(0);
+    const [status, setStatus] = useState<TIME_STATUS>();
     const [fineshed, setFineshed] = useState<boolean>();
 
     const handleStart = () => {
@@ -30,14 +35,29 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
         _times.map((item) => {
             if (item.id === time.id) {
                 const date = new Date();
-                item.date = date.toString()
+                item.date = status === 'waiting' ? date.toString() : item.date
                 item.status = 'active'
             }
         })
 
         setTimes(_times);
-        setIsRunning(true);
+        setStatus('active');
 
+    }
+
+    const handlePause = () => {
+        const _times: ITimes[] = times
+
+        _times.map((item) => {
+            if (item.id === time.id) {
+                const date = new Date();
+                item.status = 'paused'
+                item.pauseDate = date.toString()
+            }
+        })
+
+        setTimes(_times);
+        setStatus('paused');
     }
 
     const getTime = () => {
@@ -62,17 +82,17 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
     }
 
     useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let interval: any
+        let activeInterval: any
+        let pauseInterval: any
 
-        if (isRunning && !fineshed) {
-            interval = setInterval(() => {
+        if (status === 'active' && !fineshed) {
+            activeInterval = setInterval(() => {
                 const secondsDiff = differenceInSeconds(
                     new Date(),
                     new Date(time.date!)
                 )
 
-                if (secondsDiff >= time.minutes * 60) {
+                if (secondsDiff - secondsPaused >= time.minutes * 60) {
 
                     const _times: ITimes[] = times
 
@@ -83,50 +103,84 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
                     })
                     setTimes(_times);
                     setFineshed(true)
-                    setIsRunning(false)
-                    clearInterval(interval)
+                    setStatus('completed')
+                    RNBeep.beep(false)
+                    Vibration.vibrate(500)
+                    clearInterval(activeInterval)
                 } else {
-                    setSeconds(secondsDiff)
+                    setSeconds(secondsDiff - secondsPaused)
                 }
             }, 1000)
         }
 
-        return () => {
-            clearInterval(interval)
+        if (status === 'paused' && !fineshed) {
+            pauseInterval = setInterval(() => {
+                const secondsDiff = differenceInSeconds(
+                    new Date(),
+                    new Date(time.pauseDate!)
+                )
+                setSecondsPaused(secondsPaused + secondsDiff)
+            }, 1000)
         }
-    }, [isRunning])
+
+        return () => {
+            clearInterval(activeInterval)
+            clearInterval(pauseInterval)
+        }
+    }, [status])
 
     useEffect(() => {
-        setIsRunning(time.status === 'active')
+        setStatus(time.status)
     }, [])
 
     return (
         <Container>
-            <Box flexDirection="column" width={50}>
-                <CustomText color={theme.COLORS.SECONDARY} bold>{time.completeName}</CustomText>
-                <Spacer vertical={10} />
-                <CustomText>
-                    {
-                        time.date
-                            ? format(new Date(time.date), "dd/MM/yy k'h'm")
-                            : 'Aguardando'
-                    }
-                </CustomText>
-            </Box>
-            <Box flexDirection="row" alignItems="center" width={50}>
+            <Box flexDirection="row" justiFyContent="space-between">
+                <Tag label={`${time.minutes}min`} color={theme.COLORS.INFO} />
                 {
-
-                    isRunning
-                        ? <CustomText color={theme.COLORS.GREEN_500} bold size={theme.FONT_SIZE.LG}>{getTime()}</CustomText>
-                        : time.status === 'waiting' ?
-                            <Pressable onPress={handleStart}>
-                                <PlayerPlayIcon fill={theme.COLORS.WHITE} />
+                    time.status === 'waiting' || time.status === 'paused' ?
+                        <Pressable onPress={handleStart}>
+                            <PlayerPlayIcon fill={theme.COLORS.WHITE} />
+                        </Pressable>
+                        : time.status === 'active' ?
+                            <Pressable onPress={handlePause}>
+                                <PauseIcon fill={theme.COLORS.WHITE} />
                             </Pressable>
-                            :
-                            <Pressable onPress={handleComplete}>
+                            : <Pressable onPress={handleComplete}>
                                 <CheckIcon stroke={theme.COLORS.GREEN_500} />
                             </Pressable>
                 }
+            </Box>
+            <Spacer vertical={20} />
+            <Box flexDirection="row">
+                <Box flexDirection="column" width={50}>
+                    <CustomText color={theme.COLORS.SECONDARY} bold>{time.completeName}</CustomText>
+                    <Spacer vertical={10} />
+                    <CustomText>
+                        {
+                            time.date
+                                ? format(new Date(time.date), "dd/MM/yy k'h'm")
+                                : 'Aguardando'
+                        }
+                    </CustomText>
+                </Box>
+                <Box flexDirection="row" alignItems="center" width={50}>
+                    <CustomText color={theme.COLORS.GREEN_500} bold size={theme.FONT_SIZE.LG}>{getTime()}</CustomText>
+                    {/* {
+
+                        isRunning
+                            ? <CustomText color={theme.COLORS.GREEN_500} bold size={theme.FONT_SIZE.LG}>{getTime()}</CustomText>
+                            : time.status === 'waiting' ?
+                                <Pressable onPress={handleStart}>
+                                    <PlayerPlayIcon fill={theme.COLORS.WHITE} />
+                                </Pressable>
+                                :
+                                <Pressable onPress={handleComplete}>
+                                    <CheckIcon stroke={theme.COLORS.GREEN_500} />
+                                </Pressable>
+                    } */}
+                </Box>
+
             </Box>
         </Container>
     )

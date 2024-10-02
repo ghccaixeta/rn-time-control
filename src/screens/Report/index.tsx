@@ -3,7 +3,7 @@ import Container from "@components/atoms/Container";
 import Spacer from "@components/atoms/Spacer";
 import CustomText from "@components/atoms/Text";
 import React, { useEffect, useState } from "react";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList, TextInput } from "react-native-gesture-handler";
 import { ITimes } from "src/context/times";
 import { getDBConnection, getTimes } from "src/services/db";
 import { useTheme } from "styled-components/native";
@@ -12,6 +12,8 @@ import ReportListItem from "@components/organisms/ReportListItem";
 import Divider from "@components/atoms/Divider";
 import { ActivityIndicator, RefreshControl } from "react-native";
 import InputContainer from "@components/atoms/InputContainer";
+import SearchIcon from '@assets/icons/search.svg'
+import CalendarIcon from '@assets/icons/calendar.svg'
 
 const ReportScreen: React.FC = () => {
     const theme = useTheme()
@@ -42,7 +44,13 @@ const ReportScreen: React.FC = () => {
                         }
                         ListHeaderComponent={
                             <>
-
+                                <InputContainer
+                                    leftComponent={<SearchIcon stroke={theme.COLORS.SECONDARY} />}
+                                    rightComponent={<CalendarIcon stroke={theme.COLORS.SECONDARY} />}
+                                >
+                                    <TextInput style={{ flex: 1 }}></TextInput>
+                                </InputContainer>
+                                <Spacer vertical={30} />
                             </>
                         }
                         ListEmptyComponent={

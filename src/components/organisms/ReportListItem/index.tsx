@@ -14,12 +14,12 @@ const ReportListItem: React.FC<IReportListItem> = ({ time }) => {
     const theme = useTheme()
     return (
         <Box flexDirection="row" justiFyContent="space-between" alignItems="center">
-            <Box flexDirection="column" width={50}>
+            <Box flexDirection="column" width={70}>
                 <CustomText color={theme.COLORS.SECONDARY} size={theme.FONT_SIZE.LG} bold>{time.completeName}</CustomText>
                 <Spacer vertical={8} />
                 <CustomText>{format(new Date(time.date!), "dd/MM/yy k'h'mm")}</CustomText>
             </Box>
-            <Box flexDirection="row" width={50}>
+            <Box flexDirection="row" width={30}>
                 <CustomText size={theme.FONT_SIZE.XL} bold>{time.minutes}<CustomText>min</CustomText></CustomText>
             </Box>
         </Box>

@@ -7,5 +7,6 @@ export const Container = styled.View`
     padding: 12px;
     border: 1px solid ${(props: any) => props.theme.COLORS.GRAY_200};
     border-radius: 10px;
+    align-items: center;
 
 `

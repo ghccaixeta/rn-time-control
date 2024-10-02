@@ -53,7 +53,6 @@ const TimesForm: React.FC = () => {
                     <>
                         <InputContainer leftComponent={<UserIcon stroke={theme.COLORS.PRIMARY} />} errorMessage={touched.completeName ? errors.completeName : undefined}>
                             <TextInput
-                                autoCapitalize={'characters'}
                                 value={values.completeName}
                                 onChangeText={handleChange('completeName')}
                                 placeholder="Insira o nome."
@@ -65,7 +64,6 @@ const TimesForm: React.FC = () => {
 
                         <InputContainer leftComponent={<HourGlassTimeIcon stroke={theme.COLORS.PRIMARY} />} errorMessage={touched.time ? errors.time : undefined}>
                             <TextInput
-                                autoCapitalize={'characters'}
                                 keyboardType="number-pad"
                                 value={values.time?.toString()}
                                 onChangeText={handleChange('time')}

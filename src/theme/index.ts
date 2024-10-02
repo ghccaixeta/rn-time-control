@@ -9,6 +9,8 @@ export default {
     GREEN_700: '#00875F',
     GREEN_500: '#50FA7B',
 
+    INFO: '#8BE9FD',
+
     RED: '#F75A68',
     RED_DARK: '#AA2834',
 

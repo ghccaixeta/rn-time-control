@@ -7,9 +7,12 @@ export interface ITimes {
     id: string;
     completeName: string;
     minutes: number;
-    status: 'waiting' | 'active' | 'completed'
+    status: TIME_STATUS
     date?: string;
+    pauseDate?: string;
 }
+
+export type TIME_STATUS = 'waiting' | 'active' | 'completed' | 'paused'
 
 const TimesContext = createContext<ITimesContext>({} as ITimesContext);
 
