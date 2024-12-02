@@ -1,9 +1,9 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Container } from "./styles";
 import CustomText from "../Text";
 
 interface ITagProps {
-    label: string
+    label: string | ReactNode
     color: string
 }
 
@@ -11,7 +11,11 @@ const Tag: React.FC<ITagProps> = ({ label, color }) => {
 
     return (
         <Container backgroundColor={color}>
-            <CustomText color={color} bold>{label}</CustomText>
+            {
+                typeof (label) === 'string' ?
+                    <CustomText color={color} bold>{label}</CustomText>
+                    : label
+            }
         </Container>
     )
 

@@ -15,6 +15,8 @@ import { differenceInSeconds, format } from "date-fns";
 import { getDBConnection, saveTimes } from "src/services/db";
 import Tag from "@components/atoms/Tag";
 import RNBeep from 'react-native-a-beep';
+import InfinityIcon from '@assets/icons/infinity.svg'
+import PlayerStopIcon from '@assets/icons/player-stop.svg'
 
 interface ITimesCardProps {
     time: ITimes
@@ -81,36 +83,61 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
         setTimes(_times)
     }
 
+    const handleStop = async () => {
+        const _times: ITimes[] = times
+
+        _times.map((item) => {
+            if (item.id === time.id) {
+                item.status = 'completed'
+            }
+        })
+        setTimes(_times);
+        setFineshed(true)
+        setStatus('completed')
+    }
+
     useEffect(() => {
         let activeInterval: any
         let pauseInterval: any
 
         if (status === 'active' && !fineshed) {
-            activeInterval = setInterval(() => {
-                const secondsDiff = differenceInSeconds(
-                    new Date(),
-                    new Date(time.date!)
-                )
+            if (time.minutes > 0) {
+                activeInterval = setInterval(() => {
+                    const secondsDiff = differenceInSeconds(
+                        new Date(),
+                        new Date(time.date!)
+                    )
 
-                if (secondsDiff - secondsPaused > time.minutes * 60) {
+                    if (secondsDiff - secondsPaused > time.minutes * 60) {
 
-                    const _times: ITimes[] = times
+                        const _times: ITimes[] = times
 
-                    _times.map((item) => {
-                        if (item.id === time.id) {
-                            item.status = 'completed'
-                        }
-                    })
-                    setTimes(_times);
-                    setFineshed(true)
-                    setStatus('completed')
-                    RNBeep.beep(false)
-                    Vibration.vibrate(500)
-                    clearInterval(activeInterval)
-                } else {
+                        _times.map((item) => {
+                            if (item.id === time.id) {
+                                item.status = 'completed'
+                            }
+                        })
+                        setTimes(_times);
+                        setFineshed(true)
+                        setStatus('completed')
+                        RNBeep.beep(false)
+                        Vibration.vibrate(500)
+                        clearInterval(activeInterval)
+                        setSeconds(time.minutes * 60)
+                    } else {
+                        setSeconds(secondsDiff - secondsPaused)
+                    }
+                }, 1000)
+
+            } else {
+                activeInterval = setInterval(() => {
+                    const secondsDiff = differenceInSeconds(
+                        new Date(),
+                        new Date(time.date!)
+                    )
                     setSeconds(secondsDiff - secondsPaused)
-                }
-            }, 1000)
+                }, 1000)
+            }
         }
 
         if (status === 'paused' && !fineshed) {
@@ -136,20 +163,36 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
     return (
         <Container>
             <Box flexDirection="row" justiFyContent="space-between">
-                <Tag label={`${time.minutes}min`} color={theme.COLORS.INFO} />
-                {
-                    time.status === 'waiting' || time.status === 'paused' ?
-                        <Pressable onPress={handleStart}>
-                            <PlayerPlayIcon fill={theme.COLORS.WHITE} />
-                        </Pressable>
-                        : time.status === 'active' ?
-                            <Pressable onPress={handlePause}>
-                                <PauseIcon fill={theme.COLORS.WHITE} />
-                            </Pressable>
-                            : <Pressable onPress={handleComplete}>
-                                <CheckIcon stroke={theme.COLORS.WHITE} />
-                            </Pressable>
-                }
+                <Tag label={time.minutes && time.minutes > 0 ? `${time.minutes}min` : <InfinityIcon stroke={theme.COLORS.INFO} />} color={theme.COLORS.INFO} />
+                <Box flexDirection="row" width={50}>
+                    {
+                        time.status === 'waiting' || time.status === 'paused' ?
+                            <>
+                                <Pressable onPress={handleStart}>
+                                    <PlayerPlayIcon fill={theme.COLORS.WHITE} />
+                                </Pressable>
+
+                                {
+                                    time.minutes < 1 &&
+                                    <>
+                                        <Spacer horizontal={10} />
+
+                                        <Pressable onPress={handleStop}>
+                                            <PlayerStopIcon fill={theme.COLORS.WHITE} />
+                                        </Pressable>
+                                    </>
+                                }
+                            </>
+                            : time.status === 'active' ?
+                                <Pressable onPress={handlePause}>
+                                    <PauseIcon fill={theme.COLORS.WHITE} />
+                                </Pressable>
+                                : <Pressable onPress={handleComplete}>
+                                    <CheckIcon stroke={theme.COLORS.WHITE} />
+                                </Pressable>
+                    }
+
+                </Box>
             </Box>
             <Spacer vertical={20} />
             <Box flexDirection="row">

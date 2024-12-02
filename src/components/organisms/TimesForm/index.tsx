@@ -13,6 +13,9 @@ import Button from "src/components/atoms/Button";
 import Spacer from "src/components/atoms/Spacer";
 import { useTimes } from "src/context/times";
 import { Modalize } from "react-native-modalize";
+import CustomText from "@components/atoms/Text";
+import { Switch } from "react-native";
+import Box from "@components/atoms/Box";
 
 interface ITimesFormInterface {
     modalRef: React.RefObject<Modalize>
@@ -26,9 +29,7 @@ const FormSchema = Yup.object().shape({
     completeName: Yup.string()
         .required('O nome é obrigatório')
         .min(3, 'O nome deve deve conter 3 dígitos.'),
-    time: Yup.number()
-        .required('O tempo é obrigatório.')
-        .min(__DEV__ ? 1 : 10, 'O tempo mímino deve ser 10min.')
+    time: Yup.number().nullable(),
 });
 
 const TimesForm: React.FC<ITimesFormInterface> = ({ modalRef }) => {
@@ -42,6 +43,7 @@ const TimesForm: React.FC<ITimesFormInterface> = ({ modalRef }) => {
     const handleSubmit = async (
         values: FormValues,
     ) => {
+        console.log(values)
         const hashSHA256 = CryptoJS.SHA256(new Date().getTime().toString()).toString();
         setIsLoading(true)
         setTimes([...times, { id: hashSHA256, completeName: values.completeName, minutes: values.time, status: 'waiting' }])
@@ -52,7 +54,7 @@ const TimesForm: React.FC<ITimesFormInterface> = ({ modalRef }) => {
     return (
         <Container backgroundColor={theme.COLORS.WHITE}>
             <Formik
-                initialValues={{ completeName: '', time: 10 }}
+                initialValues={{ completeName: '', time: 12 }}
                 onSubmit={handleSubmit}
                 validationSchema={FormSchema}>
                 {({ handleChange, handleSubmit, values, errors, touched }) => (
@@ -77,6 +79,8 @@ const TimesForm: React.FC<ITimesFormInterface> = ({ modalRef }) => {
                                 style={{ flex: 1 }}
                             />
                         </InputContainer>
+
+                        <Spacer vertical={20} />
 
                         <Spacer vertical={40} />
 
