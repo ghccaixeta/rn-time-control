@@ -5,6 +5,6 @@ export const Container = styled.View`
     background-color: ${(props: any) => props.theme.COLORS.WHITE};
     padding: 20px 15px;
     border-radius: 10px;
-    min-width: 120px;
+    width: 100%;
 
 `

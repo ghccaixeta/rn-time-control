@@ -15,15 +15,22 @@ const TimesHeader: React.FC = () => {
 
     return (
         <Box flexDirection="row" justiFyContent="space-between">
-            <Card title="Ativos" leftComponent={<RocketIcon stroke={theme.COLORS.PRIMARY} />}>
-                <CustomText color={theme.COLORS.PRIMARY} center bold size={theme.FONT_SIZE.XL}>{times.filter((item) => item.status === 'active').length}</CustomText>
-            </Card>
-            <Card title="Fila" leftComponent={<UsersIcon stroke={theme.COLORS.PRIMARY} />}>
-                <CustomText color={theme.COLORS.PRIMARY} center bold size={theme.FONT_SIZE.XL}>{times.filter((item) => item.status === 'waiting').length}</CustomText>
-            </Card>
-            <Card title="Expirado" leftComponent={<CheckIcon stroke={theme.COLORS.PRIMARY} />}>
-                <CustomText color={theme.COLORS.PRIMARY} center bold size={theme.FONT_SIZE.XL}>{times.filter((item) => item.status === 'completed').length}</CustomText>
-            </Card>
+            <Box flexDirection="row" width={30}>
+                <Card title="Ativos" leftComponent={<RocketIcon stroke={theme.COLORS.PRIMARY} />}>
+                    <CustomText color={theme.COLORS.PRIMARY} center bold size={theme.FONT_SIZE.XL}>{times.filter((item) => item.status === 'active').length}</CustomText>
+                </Card>
+
+            </Box>
+            <Box flexDirection="row" width={30}>
+                <Card title="Fila" leftComponent={<UsersIcon stroke={theme.COLORS.PRIMARY} />}>
+                    <CustomText color={theme.COLORS.PRIMARY} center bold size={theme.FONT_SIZE.XL}>{times.filter((item) => item.status === 'waiting').length}</CustomText>
+                </Card>
+            </Box>
+            <Box flexDirection="row" width={30}>
+                <Card title="Expirado" leftComponent={<CheckIcon stroke={theme.COLORS.PRIMARY} />}>
+                    <CustomText color={theme.COLORS.PRIMARY} center bold size={theme.FONT_SIZE.XL}>{times.filter((item) => item.status === 'completed').length}</CustomText>
+                </Card>
+            </Box>
         </Box>
     )
 
