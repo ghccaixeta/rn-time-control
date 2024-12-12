@@ -6,6 +6,7 @@ import React, { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Loader from 'src/components/atoms/Loader';
+import { ModalProvider } from 'src/context/modal';
 import { TimesProvider } from 'src/context/times';
 import { createTable, getDBConnection } from 'src/services/db';
 import theme from 'src/theme';
@@ -27,13 +28,14 @@ export default function App() {
       <SafeAreaProvider>
         <TimesProvider>
           <GestureHandlerRootView>
-            {
-              fontsLoaded ?
-                <Routes />
-                :
-                <Loader />
-            }
-
+            <ModalProvider>
+              {
+                fontsLoaded ?
+                  <Routes />
+                  :
+                  <Loader />
+              }
+            </ModalProvider>
           </GestureHandlerRootView>
         </TimesProvider>
       </SafeAreaProvider>

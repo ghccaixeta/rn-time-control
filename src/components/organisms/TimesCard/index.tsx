@@ -17,6 +17,9 @@ import Tag from "@components/atoms/Tag";
 import RNBeep from 'react-native-a-beep';
 import InfinityIcon from '@assets/icons/infinity.svg'
 import PlayerStopIcon from '@assets/icons/player-stop.svg'
+import RepeatIcon from '@assets/icons/repeat.svg'
+import { useModal } from "src/context/modal";
+import RenewForm from "../RenewForm";
 
 interface ITimesCardProps {
     time: ITimes
@@ -25,6 +28,7 @@ interface ITimesCardProps {
 const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
     const theme = useTheme()
     const { times, setTimes } = useTimes()
+    const modal = useModal()
     const [seconds, setSeconds] = useState(0);
     const [secondsPaused, setSecondsPaused] = useState(0);
     const [status, setStatus] = useState<TIME_STATUS>();
@@ -94,6 +98,17 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
         setTimes(_times);
         setFineshed(true)
         setStatus('completed')
+    }
+
+    const handleModal = async () => {
+        modal.show({ content: <RenewForm item={time} handleRenew={handleRenew} /> })
+    }
+
+    const handleRenew = (item: ITimes[]) => {
+        setTimes(item)
+        setFineshed(false)
+        setStatus('active')
+        modal.hide()
     }
 
     useEffect(() => {
@@ -187,9 +202,18 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
                                 <Pressable onPress={handlePause}>
                                     <PauseIcon fill={theme.COLORS.WHITE} />
                                 </Pressable>
-                                : <Pressable onPress={handleComplete}>
-                                    <CheckIcon stroke={theme.COLORS.WHITE} />
-                                </Pressable>
+                                :
+                                <>
+                                    <Pressable onPress={handleComplete}>
+                                        <CheckIcon stroke={theme.COLORS.WHITE} />
+                                    </Pressable>
+
+                                    <Spacer horizontal={10} />
+
+                                    <Pressable onPress={handleModal}>
+                                        <RepeatIcon stroke={theme.COLORS.WHITE} />
+                                    </Pressable>
+                                </>
                     }
 
                 </Box>

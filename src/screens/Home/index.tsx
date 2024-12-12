@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import Container from "src/components/atoms/Container";
 import Spacer from "src/components/atoms/Spacer";
@@ -9,11 +9,13 @@ import NotFoundIcon from "@assets/ilustrations/not-found.svg"
 import Box from "src/components/atoms/Box";
 import CustomText from "src/components/atoms/Text";
 import TimesHeader from "@components/organisms/TimesHeader";
+import { Modalize } from "react-native-modalize";
 
 
 const HomeScreen: React.FC = () => {
     const theme = useTheme()
     const { times } = useTimes()
+    const modalizeRef = useRef<Modalize>(null);
 
     return (
         <Container>
@@ -37,6 +39,10 @@ const HomeScreen: React.FC = () => {
                 ItemSeparatorComponent={() => <Spacer vertical={10} />
                 }
             />
+
+            <Modalize ref={modalizeRef}>
+                <CustomText>Modal</CustomText>
+            </Modalize>
         </Container>
     )
 }

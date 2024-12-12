@@ -7,13 +7,19 @@ interface IInputContainerProps {
     leftComponent?: ReactNode
     rightComponent?: ReactNode
     errorMessage?: string
+    backgroundColor?: string
 }
 
-const InputContainer: React.FC<PropsWithChildren<IInputContainerProps>> = ({ leftComponent, rightComponent, errorMessage, children }) => {
+const InputContainer: React.FC<PropsWithChildren<IInputContainerProps>> = ({ leftComponent,
+    rightComponent,
+    errorMessage,
+    backgroundColor,
+    children
+}) => {
     const theme = useTheme()
     return (
         <>
-            <Container>
+            <Container backgroundColor={backgroundColor}>
                 {leftComponent}
                 {children}
                 {rightComponent}
