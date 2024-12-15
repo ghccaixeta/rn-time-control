@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Container } from "./styles";
 
 import { ITimes, TIME_STATUS, useTimes } from "src/context/times";
@@ -28,6 +28,7 @@ interface ITimesCardProps {
 const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
     const theme = useTheme()
     const { times, setTimes } = useTimes()
+    const timesRef = useRef(times);
     const modal = useModal()
     const [seconds, setSeconds] = useState(0);
     const [secondsPaused, setSecondsPaused] = useState(0);
@@ -35,6 +36,8 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
     const [fineshed, setFineshed] = useState<boolean>();
 
     const handleStart = () => {
+
+
 
         const _times: ITimes[] = times
 
@@ -81,9 +84,11 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
 
         const db = await getDBConnection();
 
-        await saveTimes(db, time)
+        await saveTimes(db, { ...time, minutes: time.minutes > 0 ? time.minutes : (seconds / 60) })
 
         const _times = times.filter(item => item.id !== time.id)
+
+
         setTimes(_times)
     }
 
@@ -111,6 +116,22 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
         modal.hide()
     }
 
+    const handleTimeComplete = (time: ITimes) => {
+        const _times = timesRef.current
+        console.log('TIMES', _times)
+        _times.map((item) => {
+            if (item.id === time.id) {
+                item.status = 'completed'
+            }
+        })
+        setTimes(_times);
+        setFineshed(true)
+        setStatus('completed')
+        RNBeep.beep(false)
+        Vibration.vibrate(500)
+        setSeconds(time.minutes * 60)
+    }
+
     useEffect(() => {
         let activeInterval: any
         let pauseInterval: any
@@ -125,20 +146,9 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
 
                     if (secondsDiff - secondsPaused > time.minutes * 60) {
 
-                        const _times: ITimes[] = times
-
-                        _times.map((item) => {
-                            if (item.id === time.id) {
-                                item.status = 'completed'
-                            }
-                        })
-                        setTimes(_times);
-                        setFineshed(true)
-                        setStatus('completed')
-                        RNBeep.beep(false)
-                        Vibration.vibrate(500)
+                        handleTimeComplete(time)
                         clearInterval(activeInterval)
-                        setSeconds(time.minutes * 60)
+
                     } else {
                         setSeconds(secondsDiff - secondsPaused)
                     }
@@ -174,6 +184,10 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
     useEffect(() => {
         setStatus(time.status)
     }, [])
+
+    useEffect(() => {
+        timesRef.current = times;
+    }, [times])
 
     return (
         <Container>
