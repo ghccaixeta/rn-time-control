@@ -20,7 +20,7 @@ const ReportListItem: React.FC<IReportListItem> = ({ time }) => {
                 <CustomText>{format(new Date(time.date!), "dd/MM/yy k'h'mm")}</CustomText>
             </Box>
             <Box flexDirection="row" width={30}>
-                <CustomText size={theme.FONT_SIZE.XL} bold>{time.minutes}<CustomText>min</CustomText></CustomText>
+                <CustomText size={theme.FONT_SIZE.XL} bold>{time.minutes.toPrecision(1)}<CustomText>min</CustomText></CustomText>
             </Box>
         </Box>
     )
