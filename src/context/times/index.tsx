@@ -10,6 +10,9 @@ export interface ITimes {
     status: TIME_STATUS
     date?: string;
     pauseDate?: string;
+    pagerNumber?: number;
+    phone?: string
+    hasPaid?: boolean
 }
 
 export type TIME_STATUS = 'waiting' | 'active' | 'completed' | 'paused'

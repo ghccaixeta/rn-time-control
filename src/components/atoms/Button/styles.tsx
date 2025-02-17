@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Pressable } from "react-native-gesture-handler";
+import { Pressable } from "react-native";
 import styled from "styled-components/native";
 
 export const Container = styled(Pressable)`

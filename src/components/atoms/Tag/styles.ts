@@ -8,7 +8,7 @@ interface IContainerProps {
 export const Container = styled.View<IContainerProps>`
 
     padding: 4px 12px;
-    border-radius: 100px;
+    border-radius: 30px;
     background-color: ${(props: any) => props.backgroundColor + 25};
     align-self: flex-start;
     border: 1px solid ${(props: any) => props.backgroundColor};
