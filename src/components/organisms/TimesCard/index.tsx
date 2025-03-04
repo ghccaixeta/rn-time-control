@@ -21,6 +21,8 @@ import PlayerStopIcon from '@assets/icons/player-stop.svg'
 import RepeatIcon from '@assets/icons/repeat.svg'
 import ModalForm from "../ModalForm";
 import { Modalize } from "react-native-modalize";
+import { useNavigation } from "@react-navigation/native";
+import { InicioStackNavigationProp } from "@routes/inicio.routes";
 
 interface ITimesCardProps {
     time: ITimes
@@ -28,6 +30,7 @@ interface ITimesCardProps {
 
 const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
     const theme = useTheme()
+    const { navigate } = useNavigation<InicioStackNavigationProp>()
     const { times, setTimes } = useTimes()
     const timesRef = useRef(times);
     const modalizeRef = useRef<Modalize>(null);
@@ -113,9 +116,13 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
         })
     }
 
-    const handleModal = async (isRenew?: boolean) => {
+    const handleNavigate = async (isRenew?: boolean) => {
         setIsRenew(isRenew)
-        modalizeRef.current?.open();
+        navigate('Form', {
+            onSubmit: handleEdit,
+            isRenew: isRenew ?? false,
+            item: time
+        })
     }
 
     const handleEdit = (item: ITimes) => {
@@ -123,9 +130,8 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
 
         const _item = item;
 
-        if (isRenew) {
+        if (_item.status === 'active') {
             setFineshed(false)
-            _item.status = 'active'
         }
 
         _times = _times.map((t) => (t.id === _item.id ? _item : t));
@@ -224,7 +230,7 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
 
                     </Box>
                     <Box flexDirection="row" width={50}>
-                        <Pressable onPress={() => handleModal(false)}>
+                        <Pressable onPress={() => handleNavigate(false)}>
                             <EditIcon stroke={theme.COLORS.WHITE} />
                         </Pressable>
                         <Spacer horizontal={10} />
@@ -253,7 +259,7 @@ const TimesCard: React.FC<ITimesCardProps> = ({ time }) => {
 
                                         <Spacer horizontal={10} />
 
-                                        <Pressable onPress={() => handleModal(true)}>
+                                        <Pressable onPress={() => handleNavigate(true)}>
                                             <RepeatIcon stroke={theme.COLORS.WHITE} />
                                         </Pressable>
                                     </>

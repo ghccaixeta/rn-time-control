@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import Spacer from "src/components/atoms/Spacer";
 import { ITimes, useTimes } from "src/context/times";
@@ -8,31 +8,29 @@ import NotFoundIcon from "@assets/ilustrations/not-found.svg"
 import Box from "src/components/atoms/Box";
 import CustomText from "src/components/atoms/Text";
 import TimesHeader from "@components/organisms/TimesHeader";
-import { Modalize } from "react-native-modalize";
-import ModalForm from "@components/organisms/ModalForm";
 import { useNavigation } from "@react-navigation/native";
 import PlusIcon from '@assets/icons/plus.svg'
 import { Pressable } from "react-native";
+import { InicioStackNavigationProp } from "@routes/inicio.routes";
 
 
 const HomeScreen: React.FC = () => {
     const navigation = useNavigation()
+    const { navigate } = useNavigation<InicioStackNavigationProp>()
     const theme = useTheme()
     const { times, setTimes } = useTimes()
-    const modalizeRef = useRef<Modalize>(null);
 
-    const openModal = () => {
-        modalizeRef.current?.open();
+    const handleNavigate = () => {
+        navigate('Form', { onSubmit: handleSubmit })
     }
 
     const handleSubmit = (item: ITimes) => {
-        setTimes([...times, item])
-        modalizeRef.current?.close();
+        setTimes(prev => [...prev, item])
     }
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerRight: () => <Pressable style={{ padding: 12 }} onPress={openModal}><PlusIcon stroke={theme.COLORS.WHITE} /></Pressable>
+            headerRight: () => <Pressable style={{ padding: 12 }} onPress={handleNavigate}><PlusIcon stroke={theme.COLORS.WHITE} /></Pressable>
         })
     }, [navigation])
 
@@ -59,8 +57,6 @@ const HomeScreen: React.FC = () => {
                 }
                 style={{ padding: 20, backgroundColor: theme.COLORS.BACKGROUND }}
             />
-
-            <ModalForm ref={modalizeRef} onSubmit={handleSubmit} />
         </>
     )
 }

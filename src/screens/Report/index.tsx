@@ -88,7 +88,7 @@ const ReportScreen: React.FC = () => {
                                             </Pressable>
                                         }
                                     >
-                                        <TextInput style={{ flex: 1 }}></TextInput>
+                                        <TextInput style={{ flex: 1, color: theme.COLORS.WHITE }}></TextInput>
                                     </InputContainer>
                                     <Spacer vertical={30} />
                                 </>

@@ -10,8 +10,16 @@ import ChartBarIcon from '@assets/icons/chart-bar.svg'
 import HomeScreen from '@screens/Home';
 
 import ReportScreen from '@screens/Report';
+import { NavigatorScreenParams } from '@react-navigation/native';
+import InicioStack, { InicioStackParamList } from './inicio.routes';
+import RelatorioStack, { RelatorioStackParamList } from './relatorio.routes';
 
-const { Navigator, Screen } = createBottomTabNavigator();
+export type TabParamList = {
+  TabInicioScreen: NavigatorScreenParams<InicioStackParamList>;
+  TabReportScreen: NavigatorScreenParams<RelatorioStackParamList>;
+};
+
+const { Navigator, Screen } = createBottomTabNavigator<TabParamList>();
 
 export function AppRoutes() {
   const theme = useTheme()
@@ -33,27 +41,27 @@ export function AppRoutes() {
         },
       }}>
         <Screen
-          name="Início"
-          component={HomeScreen}
+          name="TabInicioScreen"
+          component={InicioStack}
           options={{
             tabBarIcon: ({ color }) => (
               <HomeIcon stroke={color} width={25} height={25} />
             ),
-            headerStyle: { backgroundColor: theme.COLORS.PRIMARY },
-            headerTintColor: theme.COLORS.WHITE,
-            headerTitleAlign: 'left',
+            headerShown: false,
+            tabBarLabel: 'Início'
+
 
           }} />
         <Screen
-          name="Relatórios"
-          component={ReportScreen}
+          name="TabReportScreen"
+          component={RelatorioStack}
           options={{
             tabBarIcon: ({ color }) => (
               <ChartBarIcon stroke={color} width={25} height={25} />
 
             ),
-            headerStyle: { backgroundColor: theme.COLORS.PRIMARY },
-            headerTintColor: theme.COLORS.WHITE
+            headerShown: false,
+            tabBarLabel: 'Relatórios'
           }} />
       </Navigator>
     </>

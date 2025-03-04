@@ -15,7 +15,8 @@ export const createTable = async (db: SQLiteDatabase) => {
         complete_name TEXT NOT NULL,
         minutes INTEGER NOT NULL,
         status TEXT NOT NULL,
-        date TEXT NOT NULL
+        date TEXT NOT NULL,
+        phone TEXT
     );`;
 
     await db.executeSql(query);
@@ -24,7 +25,7 @@ export const createTable = async (db: SQLiteDatabase) => {
 export const getTimes = async (db: SQLiteDatabase): Promise<ITimes[]> => {
     try {
         const todoItems: ITimes[] = [];
-        const results = await db.executeSql(`SELECT rowid as id,complete_name as completeName, minutes, status, date FROM ${tableName}`);
+        const results = await db.executeSql(`SELECT rowid as id,complete_name as completeName, minutes, status, date, phone FROM ${tableName}`);
         results.forEach(result => {
             for (let index = 0; index < result.rows.length; index++) {
                 todoItems.push(result.rows.item(index))
@@ -39,7 +40,7 @@ export const getTimes = async (db: SQLiteDatabase): Promise<ITimes[]> => {
 
 export const saveTimes = async (db: SQLiteDatabase, todoItems: ITimes) => {
     const insertQuery =
-        `INSERT OR REPLACE INTO ${tableName}(complete_name,minutes,status,date) values ('${todoItems.completeName}',${todoItems.minutes},'${todoItems.status}','${todoItems.date}')`
+        `INSERT OR REPLACE INTO ${tableName}(complete_name,minutes,status,date,phone) values ('${todoItems.completeName}',${todoItems.minutes},'${todoItems.status}','${todoItems.date}','${todoItems.phone}')`
 
     return db.executeSql(insertQuery);
 };
